@@ -47,14 +47,3 @@ before you start, make sure your cooldown has run out!
 5. install the dependencies: `npm i`
 6. execute the bot `node bot.js SESSION_COOKIE_HERE`
 7. BONUS: You can repeat these steps for any amount of accounts you'd want. Keep in mind to use different accounts.
-
-# Docker alternative
-
-This option is mostly useful for people who are already using docker.
-
-It has been confirmed to run on x64(average desktop computer) and armv7(raspberry pi), but it should also be able to run on arm64(new apple computers).
-
-1. Install [Docker](https://docs.docker.com/get-docker/)
-2. Run this command: `docker run --pull=always --restart unless-stopped -it ghcr.io/placenl/placenl-bot SESSION_COOKIE_HERE`
-
------
