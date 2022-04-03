@@ -1,7 +1,10 @@
 
 # PlaceXC Bot (English)
 
-The bot for PlaceXC! (a fork of PlaceNL bot) This bot connects with the [command server](https://github.com/Redzuzu/XC-Server) and gets it's orders from there. You can see the order history [here](https://xc.zuzu.red/).
+Harness the power of the Mechon!
+
+
+This is a bot for Xenoblade r/place team! (a fork of PlaceNL bot) This bot connects with the [command server](https://github.com/Redzuzu/XC-Server) and gets it's orders from there. You can see the order history [here](https://xc.zuzu.red/).
 
 ## User script bot
 
