@@ -4,7 +4,7 @@ import WebSocket from 'ws';
 
 const VERSION_NUMBER = 2;
 
-console.log(`PlaceNL headless client V${VERSION_NUMBER}`);
+console.log(`PlaceXC headless client V${VERSION_NUMBER}`);
 
 const args = process.argv.slice(2);
 
@@ -17,7 +17,7 @@ let accessTokens = (process.env.ACCESS_TOKEN || args[0]).split(',');
 let defaultAccessToken = accessTokens[0];
 
 if (accessTokens.length > 4) {
-    console.warn("Meer dan 4 reddit accounts per IP addres wordt niet geadviseerd!")
+    console.warn("More than 4 reddit accounts per IP address is not recommended!")
 }
 
 var socket;
@@ -99,16 +99,16 @@ let getPendingWork = (work, rgbaOrder, rgbaCanvas) => {
 })();
 
 function connectSocket() {
-    console.log('Verbinden met PlaceNL server...')
+    console.log('Connecting to PlaceXC server...')
 
-    socket = new WebSocket('wss://placenl.noahvdaa.me/api/ws');
+    socket = new WebSocket('wss://xc.zuzu.red/api/ws');
 
     socket.onerror = function(e) {
         console.error("Socket error: " + e.message)
     }
 
     socket.onopen = function () {
-        console.log('Verbonden met PlaceNL server!')
+        console.log('Connected to PlaceXC server!')
         socket.send(JSON.stringify({ type: 'getmap' }));
         socket.send(JSON.stringify({ type: 'brand', brand: `nodeheadlessV${VERSION_NUMBER}` }));
     };
@@ -123,8 +123,8 @@ function connectSocket() {
 
         switch (data.type.toLowerCase()) {
             case 'map':
-                console.log(`Nieuwe map geladen (reden: ${data.reason ? data.reason : 'verbonden met server'})`)
-                currentOrders = await getMapFromUrl(`https://placenl.noahvdaa.me/maps/${data.data}`);
+                console.log(`New folder loaded (reason: ${data.reason ? data.reason : 'connected to server'})`)
+                currentOrders = await getMapFromUrl(`https://xc.zuzu.red/maps/${data.data}`);
                 currentOrderList = getRealWork(currentOrders.data);
                 break;
             default:
@@ -133,7 +133,7 @@ function connectSocket() {
     };
 
     socket.onclose = function (e) {
-        console.warn(`PlaceNL server heeft de verbinding verbroken: ${e.reason}`)
+        console.warn(`PlaceXC server has disconnected: ${e.reason}`)
         console.error('Socketfout: ', e.reason);
         socket.close();
         setTimeout(connectSocket, 1000);
@@ -143,7 +143,7 @@ function connectSocket() {
 async function attemptPlace(accessToken) {
     let retry = () => attemptPlace(accessToken);
     if (currentOrderList === undefined) {
-        setTimeout(retry, 2000); // probeer opnieuw in 2sec.
+        setTimeout(retry, 2000); // try again in 2sec.
         return;
     }
     
@@ -153,8 +153,8 @@ async function attemptPlace(accessToken) {
         map0 = await getMapFromUrl(await getCurrentImageUrl('0'))
         map1 = await getMapFromUrl(await getCurrentImageUrl('1'));
     } catch (e) {
-        console.warn('Fout bij ophalen map: ', e);
-        setTimeout(retry, 15000); // probeer opnieuw in 15sec.
+        console.warn('Error retrieving folder: ', e);
+        setTimeout(retry, 15000); // try again in 15sec.
         return;
     }
 
@@ -163,8 +163,8 @@ async function attemptPlace(accessToken) {
     const work = getPendingWork(currentOrderList, rgbaOrder, rgbaCanvas);
 
     if (work.length === 0) {
-        console.log(`Alle pixels staan al op de goede plaats! Opnieuw proberen in 30 sec...`);
-        setTimeout(retry, 30000); // probeer opnieuw in 30sec.
+        console.log(`All pixels are already in the right place! Try again in 30 sec...`);
+        setTimeout(retry, 30000); // try again in 30sec.
         return;
     }
 
@@ -176,7 +176,7 @@ async function attemptPlace(accessToken) {
     const y = Math.floor(i / 2000);
     const hex = rgbaOrderToHex(i, rgbaOrder);
 
-    console.log(`Proberen pixel te plaatsen op ${x}, ${y}... (${percentComplete}% compleet, nog ${workRemaining} over)`);
+    console.log(`Trying to post pixel on ${x}, ${y}... (${percentComplete}% complete, still ${workRemaining} over)`);
 
     const res = await place(x, y, COLOR_MAPPINGS[hex], accessToken);
     const data = await res.json();
@@ -186,17 +186,17 @@ async function attemptPlace(accessToken) {
             const nextPixel = error.extensions.nextAvailablePixelTs + 3000;
             const nextPixelDate = new Date(nextPixel);
             const delay = nextPixelDate.getTime() - Date.now();
-            console.log(`Pixel te snel geplaatst! Volgende pixel wordt geplaatst om ${nextPixelDate.toLocaleTimeString()}.`)
+            console.log(`Pixel posted too soon! Next pixel will be placed at ${nextPixelDate.toLocaleTimeString()}.`)
             setTimeout(retry, delay);
         } else {
             const nextPixel = data.data.act.data[0].data.nextAvailablePixelTimestamp + 3000;
             const nextPixelDate = new Date(nextPixel);
             const delay = nextPixelDate.getTime() - Date.now();
-            console.log(`Pixel geplaatst op ${x}, ${y}! Volgende pixel wordt geplaatst om ${nextPixelDate.toLocaleTimeString()}.`)
+            console.log(`Pixel posted on ${x}, ${y}! Next pixel will be placed at ${nextPixelDate.toLocaleTimeString()}.`)
             setTimeout(retry, delay);
         }
     } catch (e) {
-        console.warn('Fout bij response analyseren', e);
+        console.warn('Analyze response error', e);
         setTimeout(retry, 10000);
     }
 }
@@ -275,7 +275,7 @@ async function getCurrentImageUrl(id = '0') {
 			const parsed = JSON.parse(data);
 
             if (parsed.type === 'connection_error') {
-                console.error(`[!!] Kon /r/place map niet laden: ${parsed.payload.message}. Is de access token niet meer geldig?`);
+                console.error(`[!!] Could not load /r/place map: ${parsed.payload.message}. Is the access token no longer valid?`);
             }
 
 			// TODO: ew
