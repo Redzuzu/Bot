@@ -25,6 +25,9 @@ before you start, make sure your cooldown has run out!
 ### How to get reddit_session cookie
 **NOTE: People have reported that this is annoying to do on chrome because teksts get unselected. Therefore we recommend that you use firefox.**
 
+https://cdn.discordapp.com/attachments/960226685691768832/960379039997124688/reddit_session_chrome.mp4
+
+
 1. Go to [r/place](https://reddit.com/r/place)
 2. Open dev tools and go to the network tab
 3. Refresh the page
