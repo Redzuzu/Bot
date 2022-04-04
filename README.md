@@ -39,7 +39,7 @@ https://cdn.discordapp.com/attachments/960226685691768832/960379039997124688/red
 ### Installation instructions
 
 1. Install [NodeJS](https://nodejs.org/).
-2. Download the bot via [download](https://github.com/Redzuzu/XC-Bot/releases/download/v1.0/XC-Bot-master.zip) or git.
+2. Download the bot via [download](https://github.com/Redzuzu/XC-Bot/archive/refs/heads/master.zip) or git.
 3. Extract the bot anywhere on your desktop
 4. Open a command prompt/terminal in this folder
     Windows: Shift+right mousebutton in the folder -> Click on "open Powershell here"
