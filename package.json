@@ -2,7 +2,7 @@
   "type": "module",
   "dependencies": {
     "get-pixels": "^3.3.3",
-    "node-fetch": "^3.2.3",
+    "node-fetch": "^2.6.5",
     "nodejs-fetch": "^1.0.0",
     "ws": "^8.5.0"
   }

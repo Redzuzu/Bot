@@ -1,6 +1,7 @@
-import fetch from 'node-fetch';
-import getPixels from "get-pixels";
-import WebSocket from 'ws';
+const fetch = require('node-fetch');
+const getPixels = require('get-pixels');
+
+const WebSocket = require('ws');
 
 const VERSION_NUMBER = 6;
 
