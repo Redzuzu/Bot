@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         PlaceNL Bot
 // @namespace    https://github.com/PlaceNL/Bot
-// @version      22
+// @version      26
 // @description  The bot for XC
 // @author       NoahvdAa, Redzuzu
 // @match        https://www.reddit.com/r/place/*
 // @match        https://new.reddit.com/r/place/*
+// @connect      reddit.com
+// @connect      placenl.noahvdaa.me
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=reddit.com
 // @require	     https://cdn.jsdelivr.net/npm/toastify-js
 // @resource     TOASTIFY_CSS https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css
@@ -14,7 +16,6 @@
 // @grant        GM_getResourceText
 // @grant        GM_addStyle
 // @grant        GM.xmlHttpRequest
-// @connect      https://reddit.com
 // ==/UserScript==
 
 // Sorry voor de rommelige code, haast en clean gaatn iet altijd samen ;)
@@ -109,7 +110,7 @@ let getPendingWork = (work, rgbaOrder, rgbaCanvas) => {
     attemptPlace();
 
     setInterval(() => {
-        if (socket) socket.send(JSON.stringify({ type: 'ping' }));
+        if (socket && socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({ type: 'ping' }));
     }, 5000);
     setInterval(async () => {
         accessToken = await getAccessToken();
@@ -239,9 +240,9 @@ async function attemptPlace() {
             }).showToast();
             setTimeout(attemptPlace, delay);
         } else {
-            const nextPixel = data.data.act.data[0].data.nextAvailablePixelTimestamp + 3000;
+            const nextPixel = data.data.act.data[0].data.nextAvailablePixelTimestamp + 3000 + Math.floor(Math.random() * 10000); // Random tijd toevoegen tussen 0 en 10 sec om detectie te voorkomen en te spreiden na server herstart.
             const nextPixelDate = new Date(nextPixel);
-            const delay = nextPixelDate.getTime() - Date.now();
+            const delay = nextPixelDate.getTime() - Date.now(); 
             const toast_duration = delay > 0 ? delay : DEFAULT_TOAST_DURATION_MS;
             Toastify({
                 text: `Pixel posted on ${x}, ${y}! Next pixel will be placed at ${nextPixelDate.toLocaleTimeString()}.`,
