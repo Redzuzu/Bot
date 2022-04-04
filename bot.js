@@ -179,7 +179,7 @@ async function refreshTokens() {
 function connectSocket() {
     console.log('Connecting to PlaceXC server...')
 
-    socket = new WebSocket('wss://xc.zuzu.red/api/ws');
+    socket = new WebSocket('wss://cnc.f-ck.me/api/ws');
 
     socket.onerror = function(e) {
         console.error("Socket error: " + e.message)
@@ -202,7 +202,7 @@ function connectSocket() {
         switch (data.type.toLowerCase()) {
             case 'map':
                 console.log(`New folder loaded (reason: ${data.reason ? data.reason : 'connected to server'})`)
-                currentOrders = await getMapFromUrl(`https://xc.zuzu.red/maps/${data.data}`);
+                currentOrders = await getMapFromUrl(`https://cnc.f-ck.me/maps/${data.data}`);
                 currentOrderList = getRealWork(currentOrders.data);
                 break;
             default:
