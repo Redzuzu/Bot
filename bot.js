@@ -3,7 +3,7 @@ const getPixels = require('get-pixels');
 
 const WebSocket = require('ws');
 
-const VERSION_NUMBER = 6;
+const VERSION_NUMBER = 7;
 
 console.log(`PlaceXC headless client V${VERSION_NUMBER}`);
 
@@ -179,7 +179,7 @@ async function refreshTokens() {
 function connectSocket() {
     console.log('Connecting to PlaceXC server...')
 
-    socket = new WebSocket('wss://cnc.f-ck.me/api/ws');
+    socket = new WebSocket('wss://xc.zuzu.red/api/ws');
 
     socket.onerror = function(e) {
         console.error("Socket error: " + e.message)
@@ -188,7 +188,7 @@ function connectSocket() {
     socket.onopen = function () {
         console.log('Connected to PlaceXC server!')
         socket.send(JSON.stringify({ type: 'getmap' }));
-        socket.send(JSON.stringify({ type: 'brand', brand: `nodeheadlessV${VERSION_NUMBER}` }));
+        socket.send(JSON.stringify({ type: 'brand', brand: `XC-Client-headlessV${VERSION_NUMBER}` }));
     };
 
     socket.onmessage = async function (message) {
@@ -202,7 +202,7 @@ function connectSocket() {
         switch (data.type.toLowerCase()) {
             case 'map':
                 console.log(`New folder loaded (reason: ${data.reason ? data.reason : 'connected to server'})`)
-                currentOrders = await getMapFromUrl(`https://cnc.f-ck.me/maps/${data.data}`);
+                currentOrders = await getMapFromUrl(`https://xc.zuzu.red/maps/${data.data}`);
                 currentOrderList = getRealWork(currentOrders.data);
                 break;
             default:
@@ -260,7 +260,7 @@ async function attemptPlace(accessTokenHolder) {
     const y = Math.floor(i / 2000);
     const hex = rgbaOrderToHex(i, rgbaOrder);
 
-    console.log(`Trying to post pixel on ${x}, ${y}... (${percentComplete}% complete, still ${workRemaining} over)`);
+    console.log(`Trying to post pixel on ${x}, ${y}... (${percentComplete}% complete, still ${workRemaining} left)`);
 
     const res = await place(x, y, COLOR_MAPPINGS[hex], accessTokenHolder.token);
     const data = await res.json();
